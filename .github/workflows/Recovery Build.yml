@@ -41,7 +41,7 @@ on:
         type: choice
         options:
         - twrp_alioth
-        - twrp_enuma
+        - pb_alioth
         - twrp_dagu
         - twrp_pipa
       BUILD_TARGET:

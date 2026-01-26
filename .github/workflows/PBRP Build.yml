@@ -44,15 +44,6 @@ on:
         - twrp_alioth
         - twrp_dagu
         - twrp_pipa
-      BUILD_TARGET:
-        description: 'Specify your Build Target'
-        required: true
-        default: 'boot'
-        type: choice
-        options:
-        - boot
-        - recovery
-        - vendorboot
       USE_CCACHE:
         description: Use ccache for compilation
         type: boolean
@@ -127,21 +118,12 @@ jobs:
     - name: Set Release Properties
       run: |
         echo "BUILD_DATE=$(TZ=Asia/Shanghai date +%Y%m%d)" >> $GITHUB_ENV
-        cd ${GITHUB_WORKSPACE}/pbrp
-
-        if [ ${{ inputs.BUILD_TARGET }} == 'recovery' ]; then
-           echo "BUILD_TARGET_NAME=recovery" >> $GITHUB_ENV
-        elif [ ${{ inputs.BUILD_TARGET }} == 'boot' ]; then
-           echo "BUILD_TARGET_NAME=boot" >> $GITHUB_ENV
-        else
-           echo "BUILD_TARGET_NAME=vendor_boot" >> $GITHUB_ENV
-        fi
-
+        
     - name: Upload to Release
       uses: softprops/action-gh-release@master
       with:
         files: |
-          pbrp/out/target/product/${{ inputs.DEVICE_NAME }}/${{ env.BUILD_TARGET_NAME }}.img
+          pbrp/out/target/product/${{ inputs.DEVICE_NAME }}/boot.img
           pbrp/out/target/product/${{ inputs.DEVICE_NAME }}/PBRP*.zip
         name: Test PBRP for ${{ inputs.MAKEFILE_NAME }} // ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
